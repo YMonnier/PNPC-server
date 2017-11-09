@@ -133,6 +133,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>fr.pnpc.project.models</groupId>
+            <artifactId>PNPC-Models</artifactId>
+            <version>1.0-dao-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
