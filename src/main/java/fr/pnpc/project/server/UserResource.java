@@ -1,9 +1,9 @@
 package fr.pnpc.project.server;
 
 import fr.pnpc.project.models.User;
-import fr.pnpc.project.models.dao.CrudServiceBean;
-import fr.pnpc.project.models.ejb.StringSingleton;
 import fr.pnpc.project.models.ejb.UserManager;
+import fr.pnpc.project.models.exceptions.NotValidException;
+import fr.pnpc.project.models.exceptions.NullObjectException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,14 +16,29 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 public class UserResource {
     @EJB
-    StringSingleton csb;
+    UserManager csb;
     /** Method processing HTTP GET requests, producing "text/plain" MIME media
      * type.
      * @return String that will be send back as a response of type "text/plain".
      */
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return csb.getJsonString();
+        /*
+        User user = new User.Builder()
+                .setEmail("ysee@test.com")
+                .setNickname("Wow.....")
+                .setPassword("ZEDZGGHSJR")
+                .setPhoneNumber("0651576906")
+                .build();
+        try {
+            user = csb.register(user);
+        } catch (NotValidException e) {
+            return e.toString();
+        } catch (NullObjectException e) {
+            return e.toString();
+        }
+        return user.toString();*/
+        return csb.test();
     }
 }

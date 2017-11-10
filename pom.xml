@@ -14,6 +14,13 @@
 
         <jersey-version>1.19</jersey-version>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+
+        <tomee.version>7.0.1</tomee.version>
+        <openejb.javaee.api>7.0-1</openejb.javaee.api>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
     <!-- ADAPTER LES PROPRIETES SUIVANTES -->
 
@@ -35,6 +42,12 @@
             <id>bintray-ymrepos-public</id>
             <name>bintray</name>
             <url>https://dl.bintray.com/ymrepos/public</url>
+        </repository>
+
+
+        <repository>
+            <id>apache-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -127,6 +140,19 @@
                     </filters>
                 </configuration>
             </plugin>
+
+
+
+
+            <plugin>
+                <groupId>org.apache.tomee.maven</groupId>
+                <artifactId>tomee-maven-plugin</artifactId>
+                <version>${tomee.version}</version>
+                <configuration>
+                    <tomeeVersion>${tomee.version}</tomeeVersion>
+                    <tomeeClassifier>jaxrs</tomeeClassifier>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -180,6 +206,37 @@
             <artifactId>javax.ejb</artifactId>
             <version>3.1</version>
             <scope>provided</scope>
+        </dependency>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${openejb.javaee.api}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>tomee-embedded</artifactId>
+            <version>${tomee.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomee</groupId>
+            <artifactId>arquillian-tomee-embedded</artifactId>
+            <version>${tomee.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
