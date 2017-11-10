@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType;
 @Path("/users")
 @Stateless
 public class UserResource {
-    @EJB
-    UserManager csb;
+    //@EJB
+    //UserManager csb;
     /** Method processing HTTP GET requests, producing "text/plain" MIME media
      * type.
      * @return String that will be send back as a response of type "text/plain".
@@ -39,6 +39,6 @@ public class UserResource {
             return e.toString();
         }
         return user.toString();*/
-        return csb.test();
+        return "";//csb.test();
     }
 }
