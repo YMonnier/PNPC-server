@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ADAPTER LES PROPRIETES SUIVANTES -->
@@ -14,13 +15,6 @@
 
         <jersey-version>1.19</jersey-version>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
-
-        <tomee.version>7.0.1</tomee.version>
-        <openejb.javaee.api>7.0-1</openejb.javaee.api>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
     <!-- ADAPTER LES PROPRIETES SUIVANTES -->
 
@@ -43,14 +37,8 @@
             <name>bintray</name>
             <url>https://dl.bintray.com/ymrepos/public</url>
         </repository>
-
-
-        <repository>
-            <id>apache-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/releases/</url>
-        </repository>
-
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <snapshots>
@@ -80,13 +68,13 @@
     <!-- ADAPTER les coordonnées -->
     <groupId>fr.pnpc.project.server</groupId>
     <artifactId>PNPC-Server</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-heroku-SNAPSHOT</version>
     <packaging>war</packaging>
     <!-- ADAPTER les coordonnées -->
 
     <!-- ADAPTER les métadonnées -->
     <name>PNPC-server</name>
-    <description />
+    <description/>
     <url>https://${github.account}.github.io/PNPC-server/</url>
     <inceptionYear>2017</inceptionYear>
 
@@ -142,14 +130,10 @@
                 </configuration>
             </plugin>
 
-
-
-
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.9</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -158,21 +142,17 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.tomee.maven</groupId>
-                <artifactId>tomee-maven-plugin</artifactId>
-                <version>${tomee.version}</version>
-                <configuration>
-                    <tomeeVersion>${tomee.version}</tomeeVersion>
-                    <tomeeClassifier>jaxrs</tomeeClassifier>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
 
     <dependencies>
+        <dependency>
+            <groupId>fr.pnpc.project.models</groupId>
+            <artifactId>PNPC-Models</artifactId>
+            <version>1.0-dao-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -215,37 +195,6 @@
             <artifactId>javax.ejb</artifactId>
             <version>3.1</version>
             <scope>provided</scope>
-        </dependency>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>${openejb.javaee.api}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>tomee-embedded</artifactId>
-            <version>${tomee.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>arquillian-tomee-embedded</artifactId>
-            <version>${tomee.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
