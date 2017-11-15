@@ -1,10 +1,5 @@
 package fr.pnpc.project.server;
 
-import fr.pnpc.project.models.User;
-import fr.pnpc.project.models.ejb.UserManager;
-import fr.pnpc.project.models.exceptions.NotValidException;
-import fr.pnpc.project.models.exceptions.NullObjectException;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
