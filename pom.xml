@@ -142,6 +142,54 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m5.1</version>
+                <configuration>
+                    <!-- Enable this to push to origin using SSH keys -->
+                    <enableSshAgent>true</enableSshAgent>
+                    <!-- Keep your maven submodules at the same version as the parent POM -->
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!-- Pushing in-development features to origin allows all devs to see what each other
+                         are working on                                        -->
+                    <pushFeatures>true</pushFeatures>
+                    <!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to
+                         origin; you can then either manually deploy them or, if you are doing Continuous
+                         Deployments, auto-deploy them to prod -->
+                    <pushReleases>true</pushReleases>
+                    <pushHotfixes>true</pushHotfixes>
+
+                    <!-- append the feature name to the version on the feature branch. -->
+                    <enableFeatureVersions>true</enableFeatureVersions>
+                    <!-- Prevents deployments from dev workstations so that they can be done by a CI
+                         server  -->
+                    <noDeploy>true</noDeploy>
+
+                    <squash>true</squash>
+
+                    <scmCommentPrefix>[gitflow]</scmCommentPrefix>
+
+                    <!-- A VOIR -->
+                    <featureRebase>true</featureRebase>
+
+                    <!-- Allow SNAPSHOT -->
+                    <allowSnapshots>true</allowSnapshots>
+
+                    <!--pullDevelop>true</pullDevelop>
+                    <pullMaster>true</pullMaster-->
+
+                    <flowInitContext>
+                        <masterBranchName>master</masterBranchName>
+                        <developBranchName>development</developBranchName>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                    </flowInitContext>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
