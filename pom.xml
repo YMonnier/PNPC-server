@@ -68,7 +68,7 @@
     <!-- ADAPTER les coordonnées -->
     <groupId>fr.pnpc.project.server</groupId>
     <artifactId>PNPC-Server</artifactId>
-    <version>1.0-heroku-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <!-- ADAPTER les coordonnées -->
 
@@ -195,6 +195,15 @@
             <artifactId>javax.ejb</artifactId>
             <version>3.1</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
         </dependency>
     </dependencies>
 </project>
