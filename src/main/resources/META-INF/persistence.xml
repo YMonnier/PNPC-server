@@ -1,0 +1,27 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="pnpc_session_factory" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <class>fr.pnpc.project.models.model.User</class>
+        <class>fr.pnpc.project.models.model.Passage</class>
+        <class>fr.pnpc.project.models.model.Waypoint</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:postgresql://localhost:5432/super-TEST"/>
+
+            <property name="javax.persistence.jdbc.user" value="Ysee"/>
+            <property name="javax.persistence.jdbc.password"
+                      value=""/>
+
+            <!-- Les options de générations des tables -->
+            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
+
+            <property name="eclipselink.create-ddl-jdbc-file-name" value="createDDL_ddlGeneration.sql"/>
+            <property name="eclipselink.drop-ddl-jdbc-file-name" value="dropDDL_ddlGeneration.sql"/>
+        </properties>
+    </persistence-unit>
+</persistence>
