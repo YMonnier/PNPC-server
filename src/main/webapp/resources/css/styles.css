@@ -1,0 +1,25 @@
+
+#wrapper{
+   width:100%;
+   text-align:left;
+}
+
+.header {
+    height:50px;
+    background:#F0F0F0;
+    margin:5px auto;
+}
+
+.mytable td {
+    vertical-align: top;
+}
+
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 12px !important;
+}
+
+.form-signin {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+}

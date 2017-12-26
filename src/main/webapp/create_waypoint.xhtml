@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/templates/mainTemplate.xhtml">
+
+    <h:head>
+        <title>Creating a waypoint</title>
+    </h:head>
+
+    <ui:define name="css">
+        <h:outputStylesheet name="styles.css" library="css"/>
+    </ui:define>
+
+    <ui:define name="bodyContent">
+            <h:form id="formulaire">
+                    <h2>Creating a waypoint</h2>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="id">Identifiant</h:outputLabel>
+                        <p:inputText id="id"
+                                     label="Message"
+                                     placeholder="#{msg['placeholder.id']}"
+                                     value="#{waypointBean.waypoint.id}"
+                                     required="true"
+                                     requiredMessage="Please enter the latitude"
+                                     size="20"
+                                     maxlength="60">
+                            <f:ajax event="blur" render="latitudeError" />
+                        </p:inputText>
+                        <h:outputLabel for="latitude">Latitude</h:outputLabel>
+                        <p:inputText id="latitude"
+                                     label="Message"
+                                     placeholder="#{msg['placeholder.latitude']}"
+                                     value="#{waypointBean.waypoint.latitude}"
+                                     required="true"
+                                     requiredMessage="Please enter the latitude"
+                                     size="20"
+                                     maxlength="60">
+                            <f:ajax event="blur" render="latitudeError" />
+                        </p:inputText>
+
+                        <h:outputLabel for="longitude">Longitude</h:outputLabel>
+                        <p:inputText id="longitude"
+                                     label="Message"
+                                     placeholder="#{msg['placeholder.longitude']}"
+                                     value="#{waypointBean.waypoint.longitude}"
+                                     required="true"
+                                     requiredMessage="Please enter the longitude"
+                                     size="20"
+                                     maxlength="60">
+                            <f:ajax event="blur" render="longitudeError" />
+                        </p:inputText>
+                        <h:message id="latitudeError" for="latitude"/>
+                        <h:message id="longitudeError" for="longitude"/>
+                        <br/>
+                        <br/>
+                        <p:commandButton ajax="false" value="Create" action="#{waypointBean.createWaypoint()}"/>
+                    </h:panelGrid>
+            </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head title="PNPC">
+
+            <f:facet name="first">
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <meta http-equiv="pragma" content="no-cache"/>
+                <meta http-equiv="cache-control" content="no-cache"/>
+                <meta http-equiv="expires" content="0"/>
+            </f:facet>
+
+        <h:outputStylesheet library="css" name="styles.css"/>
+
+        <title>#{msg['app.title']}</title>
+
+    </h:head>
+
+    <h:body style="padding: 60px;">
+        <b:navBar brand="#{msg['app.title']}" brandHref="welcome.jsf?faces-redirect=true" fixed="top" inverse="true">
+
+            <b:navbarLinks>
+                <b:navLink value="Show" href="show_waypoints.jsf"/>
+                <b:navLink value="Create" href="create_waypoint.jsf"/>
+                <b:navLink href="login.xhtml" value="Sign in" look="success" icon="chevron-right" iconAlign="right"/>
+            </b:navbarLinks>
+
+        </b:navBar>
+
+        <ui:insert name="bodyContent"/>
+
+    </h:body>
+</html>
