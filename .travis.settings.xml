@@ -4,7 +4,7 @@
 			      https://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
         <server>
-            <id>bintray-ymrepos-public</id>
+            <id>bintray-ymonnier-pnpc</id>
             <username>ymonnier</username>
             <password>${env.BINTRAY_API_KEY}</password>
         </server>
@@ -37,9 +37,9 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-ymrepos-public</id>
+                    <id>bintray-ymonnier-pnpc</id>
                     <name>bintray</name>
-                    <url>https://dl.bintray.com/ymrepos/public</url>
+                    <url>https://dl.bintray.com/ymonnier/pnpc</url>
                 </repository>
             </repositories>
             <pluginRepositories>
@@ -47,9 +47,9 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-ymrepos-public</id>
+                    <id>bintray-ymonnier-pnpc</id>
                     <name>bintray-plugins</name>
-                    <url>https://dl.bintray.com/ymrepos/public</url>
+                    <url>https://dl.bintray.com/ymonnier/pnpc</url>
                 </pluginRepository>
             </pluginRepositories>
         </profile>
