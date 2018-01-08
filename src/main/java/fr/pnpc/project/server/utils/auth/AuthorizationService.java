@@ -1,11 +1,10 @@
-package fr.pnpc.project.server.auth;
+package fr.pnpc.project.server.utils.auth;
 
 import fr.pnpc.project.models.dao.CrudService;
 import fr.pnpc.project.models.dao.QueryParameter;
 import fr.pnpc.project.models.model.User;
 import fr.pnpc.project.server.utils.errors.Error;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
