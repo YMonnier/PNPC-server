@@ -6,10 +6,9 @@ import fr.pnpc.project.models.exceptions.NullObjectException;
 import fr.pnpc.project.models.model.Waypoint;
 import fr.pnpc.project.models.util.Validator;
 import fr.pnpc.project.models.util.ValidatorManager;
-import fr.pnpc.project.server.auth.AuthorizationService;
+import fr.pnpc.project.server.utils.auth.AuthorizationService;
 import fr.pnpc.project.server.utils.errors.Error;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
 @Path("/waypoints")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
-public class WaypointResource extends AuthorizationService{
+public class WaypointResource extends AuthorizationService {
 
     @Inject
     WaypointManager waypointManager;

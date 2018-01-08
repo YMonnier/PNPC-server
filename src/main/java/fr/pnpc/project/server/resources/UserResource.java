@@ -11,15 +11,13 @@ import fr.pnpc.project.models.model.Passage;
 import fr.pnpc.project.models.model.User;
 import fr.pnpc.project.models.util.Validator;
 import fr.pnpc.project.models.util.ValidatorManager;
-import fr.pnpc.project.server.auth.AuthorizationService;
+import fr.pnpc.project.server.utils.auth.AuthorizationService;
 import fr.pnpc.project.server.utils.errors.Error;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -27,12 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Path("/users")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
-public class UserResource extends AuthorizationService{
+public class UserResource extends AuthorizationService {
 
     @Inject
     UserManager userManager;
@@ -78,13 +75,13 @@ public class UserResource extends AuthorizationService{
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(User user) {
+    public Response create(User user) throws Exception {
         LOGGER.info("#POST " + user.toString());
         Response response = null;
         Set<ConstraintViolation<User>> constraintViolations = userValidator.constraintViolations(user);
 
 
-        if (constraintViolations.size() > 0) {
+        /*if (constraintViolations.size() > 0) {
             List<String> errors = new ArrayList<>();
             constraintViolations.forEach(u -> errors.add(u.getMessage()));
             Error error= Error.badRequest(errors);
@@ -113,7 +110,17 @@ public class UserResource extends AuthorizationService{
                 response = Error.internalServer(e).getResponse();
                 //TODO : Rollback
             }
-        }
+        }*/
+
+        user = userManager.register(user);
+
+        URI builder = uriInfo.getAbsolutePathBuilder()
+                .build();
+
+        response = Response
+                .created(builder)
+                .entity(user)
+                .build();
 
         return response;
     }
