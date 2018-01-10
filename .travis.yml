@@ -2,16 +2,13 @@ language: bash
 sudo: required
 cache:
   directories:
-  - "$HOME/.m2/repository"
-  - "$HOME/.sonar/cache"
-
+  - $HOME/.m2/repository
+  - $HOME/.sonar/cache
 before_install:
-#ignore gitflow commits except version tag
 - |
   if [[ "${TRAVIS_COMMIT_MESSAGE}" == "[gitflow]"* ]] && [[ "${TRAVIS_BRANCH}" != v[0-9]* ]]; then
     travis_terminate 0
   fi
-
 before_script:
 - cp .travis.settings.xml $HOME/.m2/settings.xml
 script:
@@ -25,10 +22,10 @@ script:
   else
     QUALIFIER=-${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}
   fi && ./.travis.scripts/mvn.sh build-helper:parse-version versions:set -DgenerateBackupPoms=false -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}'${QUALIFIER}
-- "./.travis.scripts/mvn.sh -Dmaven.site.skip=true clean verify -B -e -V"
+- ./.travis.scripts/mvn.sh -Dmaven.site.skip=true clean verify -B -e -V
 after_success:
 - |
-  if [[ "${TRAVIS_BRANCH}" == v[0-9]* ]] || [[ "${TRAVIS_BRANCH}" == release-* ]] || [[ "${TRAVIS_BRANCH}" == "development" ]]; then
+  if [[ "${TRAVIS_BRANCH}" == v[0-9]* ]] || [[ "${TRAVIS_BRANCH}" == release-* ]] || [[ "${TRAVIS_BRANCH}" == "development" ]] || [[ "${TRAVIS_BRANCH}" == feature-* ]]; then
     ./.travis.scripts/mvn.sh sonar:sonar
   fi
 - |
@@ -36,13 +33,16 @@ after_success:
     ./.travis.scripts/mvn.sh -P github-site site  fi
 deploy:
   provider: script
-  script: "./.travis.scripts/mvn.sh -Dmaven.site.skip=true -P stage-devel-nexus deploy"
-  script: "./.travis.scripts/mvn.sh -Dmaven.site.skip=true -P stage-devel-bintray deploy"
+  script: ./.travis.scripts/mvn.sh -Dmaven.site.skip=true -P stage-devel-bintray deploy
   skip_cleanup: true
   on:
     all_branches: true
 branches:
-  except: # web site and version tag
+  except:
   - gh-pages
   - master
-#  - /^v[0-9]/
+env:
+  matrix:
+    secure: xwppsGRe2UOUlGdKb02pcUb2uxrKs4vHHBHkcMOKJNkoh42NqtiDReS0baKwG3ZeXWbJpvsj90q+xnPpXz4Vm4DwcqnzyfmvsYD/5sb66YfBWdBAUPgKyC9yvTH1xrK7RuBiIufVitQSCpdL0bKVRoFMLtjCEZM9WwGYurB7jnzpU6yo0ycQHvWdNt66J7NtNajtV2lYtZPkEhOWEGeZB4M5xanlBUeVcpGS/wOgOnmaNe46E2Udl371IiweyEXRuZRUhp3EAGATFfC1cH9NSxAasaE9KkOVnQr3f+La00+NkoVhHw/3tQePv/290axZZTC+Xud8Tr3yMZxxJ5qqHeUKQGwC7qshzTasSDqwPseF3lggbxdk7M7iNo68JZBYZHuCZw6nZKQJIuw2g9537gwSH/jE1XuPpH+BbUoK12wHGIAaySNcUqGHNyQ4GjxPkyGsaoFEJa+G6JbnBHdL5vtkJa5SE8w45HlR/BvrfM51szJsWynb8JGmJPMT95fZQ8HZQODvFPmgBpulq2mNtEsd6PkofUq8HTCBv2To+DLwfPJTFysDD5ynOBmGF9xw6fzjj9TTsVcLqZ7dH1lY030cSZoUYsFmBJsxz33PbAr4r3iZJ6NcMxZll0oSSHmpX1XLE0BGwrMBIskhpJaj8bXngBUadkcSyeOU6aUPC98=
+  global:
+    secure: k9f2iTLThRIKnULFqMfWYmNMOe6d4MobLO4ldhqeJ7ofRZBcJraWKSXlIIqIegiB29kHlKypXEcfp0bw1x67hIVkuowir2AaHLurtmHnWr7au55aRZ/UDUqMSDjeI6ago1cwtjf7gI6+wEtBNorfqJYlhjX8/+gwqRilkGrSHZHhO+lzQBv+quTaQkgEWIxPHXbQ5Uq/hxdrPu14eceCUZDLbXcMlOQsLV0q9mUIpXOCT9qu24+m7RXUfZlB2Y4cRfRTdJJOXFx0/o95YEi2o52LaVGnok9mOP/YDLw5TjtbZeeurZkf/3tJyX64t5xWvJFTsPesx2bbJYnGoePdJcr7vGQqPSJxFZ5saozJtz8uANDHaNODDH3ej7gJCre72Xshk1Egug5kwoNL7Yr9lFS0iBaFXncKFr09R7r/ZjaiunqZjZ3oIS1H7P7gwqmBrRX6NL+SxgBONdefzZ8fzYAXXm6dT1K72r/pq8sut9a3fpOtV2OeCfSo2b+T1lIZ8GrfkpMA9ISVI27e1Sjzwsqk3BznzjMYwZ/MZMB3Nh6WQDtI/S0FvVjlvbyh1xvT/u0f5q5xtQ2GQl23Kh1aonek/HpudJsnjsDvUeMLjB+Wx0yG3IFqXaKeCFQda8d4Yt3rfeQk1fPgxehlBBblKz0s8k1XujCn9ZUtpM8J4nA=

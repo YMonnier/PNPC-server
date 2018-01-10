@@ -80,7 +80,6 @@ public class UserResource extends AuthorizationService {
         Response response = null;
         Set<ConstraintViolation<User>> constraintViolations = userValidator.constraintViolations(user);
 
-
         /*if (constraintViolations.size() > 0) {
             List<String> errors = new ArrayList<>();
             constraintViolations.forEach(u -> errors.add(u.getMessage()));

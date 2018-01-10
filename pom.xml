@@ -39,9 +39,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>bintray-ymrepos-public</id>
+            <id>bintray-ymonnier-pnpc</id>
             <name>bintray</name>
-            <url>https://dl.bintray.com/ymrepos/public</url>
+            <url>https://dl.bintray.com/ymonnier/pnpc</url>
         </repository>
 
         <!-- JSF -->
@@ -76,9 +76,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>bintray-ymrepos-public</id>
+            <id>bintray-ymonnier-pnpc</id>
             <name>bintray-plugins</name>
-            <url>https://dl.bintray.com/ymrepos/public</url>
+            <url>https://dl.bintray.com/ymonnier/pnpc</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -111,9 +111,9 @@
             <id>stage-devel-bintray</id>
             <distributionManagement>
                 <repository>
-                    <id>bintray-ymrepos-public</id>
-                    <name>ymrepos-public</name>
-                    <url>https://api.bintray.com/maven/ymrepos/public/${projectShortName}/;publish=1</url>
+                    <id>bintray-ymonnier-pnpc</id>
+                    <name>ymonnier-pnpc</name>
+                    <url>https://api.bintray.com/maven/ymonnier/pnpc/${projectShortName}/;publish=1</url>
                 </repository>
             </distributionManagement>
         </profile>
@@ -278,10 +278,16 @@
     </build>
 
     <dependencies>
-        <dependency>
+        <!--dependency>
             <groupId>fr.pnpc.project.models</groupId>
             <artifactId>PNPC-Models</artifactId>
             <version>1.0-dao-SNAPSHOT</version>
+        </dependency-->
+
+        <dependency>
+            <groupId>fr.pnpc.project.models</groupId>
+            <artifactId>PNPC-Models</artifactId>
+            <version>1.0.0-frozen-8</version>
         </dependency>
 
         <dependency>
