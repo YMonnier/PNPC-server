@@ -5,9 +5,6 @@ import lombok.Data;
 
 import javax.ws.rs.core.Response;
 
-/**
- * Created by bruno on 15/02/15.
- */
 @Data
 public class BusinessException extends Exception {
     /**
@@ -17,31 +14,26 @@ public class BusinessException extends Exception {
     private Response.Status status;
 
     /**
-     * link documenting the exception
-     */
-    private String link;
-
-    /**
      * detailed error description for developers
      */
     private String developerMessage;
 
     /**
-     * @param status
-     * @param message
-     * @param developerMessage
-     * @param link
+     * @param status, HTTP Status of the response.
+     * @param message, exception message.
+     * @param developerMessage, detailed error description for developers.
      */
-    public BusinessException(Response.Status status, String message,
-                             String developerMessage, String link) {
+    public BusinessException(Response.Status status,
+                             String message,
+                             String developerMessage) {
         super(message);
         this.status = status;
         this.developerMessage = developerMessage;
-        this.link = link;
+
     }
 
     public BusinessException(Throwable e) {
-        this(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage(), null, null);
+        this(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage(), null);
     }
 
     @Override
