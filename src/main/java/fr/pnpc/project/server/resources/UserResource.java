@@ -4,11 +4,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.pnpc.project.models.ejb.PassageManager;
 import fr.pnpc.project.models.ejb.UserManager;
+import fr.pnpc.project.models.ejb.WaypointManager;
 import fr.pnpc.project.models.exceptions.LoginNotAllowException;
 import fr.pnpc.project.models.exceptions.NotFoundException;
 import fr.pnpc.project.models.exceptions.ObjectNotValidException;
 import fr.pnpc.project.models.model.Passage;
 import fr.pnpc.project.models.model.User;
+import fr.pnpc.project.models.model.Waypoint;
 import fr.pnpc.project.server.utils.auth.Secured;
 import fr.pnpc.project.server.utils.auth.Util;
 import fr.pnpc.project.server.utils.exceptions.BusinessException;
@@ -31,6 +33,9 @@ public class UserResource {
 
     @Inject
     PassageManager passageManager;
+
+    @Inject
+    WaypointManager waypointManager;
 
     private final static Logger LOGGER = Logger.getLogger(UserResource.class.getSimpleName());
 
@@ -99,28 +104,37 @@ public class UserResource {
         return user;
     }
 
-    @Path("/{user_id}/passages")
+    @Path("/{user_id}/passages/{waypoint_id}")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public Passage createPassage(Passage passage) throws BusinessException {
-        LOGGER.info("#POST " + passage.toString());
+    public Passage createPassage(@PathParam("user_id") long userId, @PathParam("waypoint_id") long waypointId) throws BusinessException {
+        LOGGER.info("#POST userId " + userId + ", waypointId " + waypointId);
 
-        Passage p = null;
+        Passage passage = null;
+
         try {
-            p = passageManager.create(passage);
+            User u = userManager.getById(userId);
+            Waypoint w = waypointManager.getById(waypointId);
+
+            passage = new Passage(u, w);
+            passage  = passageManager.create(passage);
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND,
+                    e.getMessage(), Util.stackTraceToString(e));
         } catch (ObjectNotValidException e) {
             throw new BusinessException(Response.Status.BAD_REQUEST, e.getMessage(), Util.stackTraceToString(e));
         }
-        return p;
+
+        return passage;
     }
 
     @Path("/{user_id}/passages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    public List<Passage> getAllPassagesByUserId(@PathParam("user_id") int id) throws BusinessException {
+    public List<Passage> getAllPassagesByUserId(@PathParam("user_id") long id) throws BusinessException {
         LOGGER.info("#GET " + id);
         List<Passage> passages = null;
         try {

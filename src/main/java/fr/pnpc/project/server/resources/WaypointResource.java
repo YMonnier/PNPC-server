@@ -61,7 +61,7 @@ public class WaypointResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public Waypoint get(@PathParam("id") int id) throws BusinessException {
+    public Waypoint get(@PathParam("id") long id) throws BusinessException {
         LOGGER.info("#GET waypoint : " + id);
         Waypoint waypoint = null;
 
@@ -78,10 +78,11 @@ public class WaypointResource {
     @Path("/{id}")
     @DELETE
     @Secured
-    public void delete(@PathParam("id") int id) throws BusinessException {
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void delete(@PathParam("id") long id) throws BusinessException {
         LOGGER.info("#DELETE waypoint : " + id);
 
-        Response response;
         try {
             waypointManager.delete(id);
         } catch (NotFoundException e) {
@@ -95,7 +96,7 @@ public class WaypointResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public Waypoint put(@PathParam("id") int id, Waypoint waypoint) throws BusinessException {
+    public Waypoint put(@PathParam("id") long id, Waypoint waypoint) throws BusinessException {
         LOGGER.info("#PUT waypoint : " + id);
         Waypoint w = null;
 
