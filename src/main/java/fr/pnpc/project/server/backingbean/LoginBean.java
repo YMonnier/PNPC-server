@@ -28,11 +28,7 @@ public class LoginBean implements Serializable {
     public String register(){
         try {
             userManager.register(user);
-        } catch (NotValidException e) {
-            e.printStackTrace();
-        } catch (NullObjectException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (ObjectNotValidException e) {
             e.printStackTrace();
         }
 
@@ -41,15 +37,10 @@ public class LoginBean implements Serializable {
 
     public String login(){
         try {
-            userManager.login(user.getEmail(), user.getPassword());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotValidPassword notValidPassword) {
-            notValidPassword.printStackTrace();
-        } catch (UserNotExistException e) {
+            userManager.login(user.getEmail(), user.getMdp());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "welcome";
     }
 

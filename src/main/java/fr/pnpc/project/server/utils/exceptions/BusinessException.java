@@ -1,6 +1,6 @@
 package fr.pnpc.project.server.utils.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import lombok.Data;
 
 import javax.ws.rs.core.Response;
@@ -11,25 +11,33 @@ public class BusinessException extends Exception {
      * contains redundantly the HTTP status of the response sent back to the client in case of error, so that
      * the developer does not have to look into the response headers. If null a default
      */
+    @Expose
     private Response.Status status;
 
     /**
      * detailed error description for developers
      */
+    @Expose
     private String developerMessage;
 
     /**
-     * @param status, HTTP Status of the response.
-     * @param message, exception message.
+     * simple message of the error.
+     */
+    @Expose
+    private String message;
+
+    /**
+     * @param status,           HTTP Status of the response.
+     * @param message,          exception message.
      * @param developerMessage, detailed error description for developers.
      */
     public BusinessException(Response.Status status,
                              String message,
                              String developerMessage) {
         super(message);
+        this.message = message;
         this.status = status;
         this.developerMessage = developerMessage;
-
     }
 
     public BusinessException(Throwable e) {
@@ -37,13 +45,11 @@ public class BusinessException extends Exception {
     }
 
     @Override
-    @JsonIgnore
     public synchronized Throwable getCause() {
         return super.getCause();
     }
 
     @Override
-    @JsonIgnore
     public StackTraceElement[] getStackTrace() {
         return super.getStackTrace();
     }

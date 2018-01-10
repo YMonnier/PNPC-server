@@ -4,32 +4,27 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.pnpc.project.models.ejb.PassageManager;
 import fr.pnpc.project.models.ejb.UserManager;
-import fr.pnpc.project.models.exceptions.NotValidException;
-import fr.pnpc.project.models.exceptions.NullObjectException;
-import fr.pnpc.project.models.exceptions.PassageNotExistException;
+import fr.pnpc.project.models.exceptions.LoginNotAllowException;
+import fr.pnpc.project.models.exceptions.NotFoundException;
+import fr.pnpc.project.models.exceptions.ObjectNotValidException;
 import fr.pnpc.project.models.model.Passage;
 import fr.pnpc.project.models.model.User;
-import fr.pnpc.project.models.util.Validator;
-import fr.pnpc.project.models.util.ValidatorManager;
-import fr.pnpc.project.server.utils.auth.AuthorizationService;
-import fr.pnpc.project.server.utils.errors.Error;
-import org.mindrot.jbcrypt.BCrypt;
+import fr.pnpc.project.server.utils.auth.Secured;
+import fr.pnpc.project.server.utils.auth.Util;
+import fr.pnpc.project.server.utils.exceptions.BusinessException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import java.net.URI;
-import java.util.ArrayList;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
 @Path("/users")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
-public class UserResource extends AuthorizationService {
+public class UserResource {
 
     @Inject
     UserManager userManager;
@@ -39,29 +34,7 @@ public class UserResource extends AuthorizationService {
 
     private final static Logger LOGGER = Logger.getLogger(UserResource.class.getSimpleName());
 
-    @Context
-    UriInfo uriInfo;
-
-    private Validator<User> userValidator = new ValidatorManager();
-    private Validator<Passage> passageValidator = new ValidatorManager();
-
-    public UserResource(@Context HttpHeaders headers) {
-        super(headers);
-    }
-
     public UserResource() {
-        super();
-    }
-
-    /** Method processing HTTP GET requests, producing "text/plain" MIME media
-     * type.
-     *
-     * @return String that will be send back as a response of type "text/plain".
-     */
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return "HelloWorld !";
     }
 
     /**
@@ -75,53 +48,18 @@ public class UserResource extends AuthorizationService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(User user) throws Exception {
+    public User create(User user) throws BusinessException {
         LOGGER.info("#POST " + user.toString());
-        Response response = null;
-        Set<ConstraintViolation<User>> constraintViolations = userValidator.constraintViolations(user);
 
-        /*if (constraintViolations.size() > 0) {
-            List<String> errors = new ArrayList<>();
-            constraintViolations.forEach(u -> errors.add(u.getMessage()));
-            Error error= Error.badRequest(errors);
-            response = error.getResponse();
+        User u = null;
+        try {
+            u = userManager.register(user);
+        } catch (Exception e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST,
+                    e.getMessage(), Util.stackTraceToString(e));
 
-            LOGGER.warning("    - Constraints Violation Error" + error.toString());
-            LOGGER.warning("    - Constraints Violation messages " + errors.toString());
-            LOGGER.warning("    - Constraints Violation response " + response.toString());
-        } else {
-            String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-            user.setPassword(hashed);
-
-            try {
-                user = userManager.register(user);
-
-                URI builder = uriInfo.getAbsolutePathBuilder()
-                        .build();
-
-                response = Response
-                        .created(builder)
-                        .entity(user)
-                        .build();
-            } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.severe("    - Database exception " + response.toString());
-                response = Error.internalServer(e).getResponse();
-                //TODO : Rollback
-            }
-        }*/
-
-        user = userManager.register(user);
-
-        URI builder = uriInfo.getAbsolutePathBuilder()
-                .build();
-
-        response = Response
-                .created(builder)
-                .entity(user)
-                .build();
-
-        return response;
+        }
+        return u;
     }
 
     /**
@@ -133,175 +71,82 @@ public class UserResource extends AuthorizationService {
     @Path("login/")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(String json) {
+    public User login(String json) throws BusinessException {
         LOGGER.info("#POST " + json.toString());
-        Response response = null;
-        User user = null;
+
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(json).getAsJsonObject();
-        String email = jsonObject.get("email").getAsString();
-        String password = jsonObject.get("password").getAsString();
+        String nickname = jsonObject.get("nickname").getAsString();
+        String password = jsonObject.get("mdp").getAsString();
 
-        if (email == null || password == null) {
-            response = Error.badRequest("The nickname or password may not be null.")
-                    .getResponse();
-            LOGGER.warning("#POST " + response.toString());
-        } else {
-            try {
-                List<User> users = null;
-                //userManager.findWithNamedQuery(User.class, "GET_BY_MAIL", QueryParameter.with("email", email).parameters());
-                if (users != null)
-                    user = users.get(0);
 
-                if (user != null) {
-                    if (BCrypt.checkpw(password, user.getPassword())) {
-
-                        //TODO : Set token
-                        //String token = TokenUtil.generate(user);
-                        //user.setToken(token);
-
-                        response = Response.ok(user).build();
-
-                        //crudService.update(user);
-                        //crudService.commit();
-
-                        URI builderUri = uriInfo.getAbsolutePathBuilder()
-                                .build();
-
-                        response = Response
-                                .created(builderUri)
-                                .entity(user)
-                                .build();
-                        LOGGER.info("#POST " + response.toString());
-
-                    } else {
-                        response = Error.badRequest("Bad password...")
-                                .getResponse();
-                        LOGGER.warning("#POST " + response.toString());
-                    }
-                } else {
-                    response = Error.badRequest("Email does not exist.")
-                            .getResponse();
-                    LOGGER.warning("#POST " + response.toString());
-                }
-            } catch (Exception exception) {
-                LOGGER.warning("#POST " + exception.getLocalizedMessage());
-                response = Error.internalServer(exception)
-                        .getResponse();
-                //TODO : Rollback
-            }
+        User user = null;
+        try {
+            user = userManager.login(nickname, password);
+        } catch (ObjectNotValidException e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST,
+                    e.getMessage(), Util.stackTraceToString(e));
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND,
+                    e.getMessage(), Util.stackTraceToString(e));
+        } catch (LoginNotAllowException e) {
+            throw new BusinessException(Response.Status.UNAUTHORIZED,
+                    e.getMessage(), Util.stackTraceToString(e));
+        } catch (Exception e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST,
+                    e.getMessage(), "Error JWT.");
         }
-
-        return response;
+        return user;
     }
 
     @Path("/{user_id}/passages")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPassage(Passage passage){
+    @Secured
+    public Passage createPassage(Passage passage) throws BusinessException {
         LOGGER.info("#POST " + passage.toString());
-        Response response;
-        Set<ConstraintViolation<Passage>> constraintViolations = passageValidator.constraintViolations(passage);
 
-        if(this.authorization){
-            if (constraintViolations.size() > 0) {
-                response = Error.badRequest(constraintViolations.toString())
-                        .getResponse();
-                LOGGER.warning("#POST " + response.toString());
-            }
-            else{
-                try {
-                    passage = passageManager.create(passage);
-
-                    URI builder = uriInfo.getAbsolutePathBuilder()
-                            .build();
-
-                    response = Response
-                            .created(builder)
-                            .entity(passage)
-                            .build();
-
-                } catch (NullObjectException e) {
-                    LOGGER.warning("#POST " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                    //TODO : Rollback
-                } catch (NotValidException e) {
-                    LOGGER.warning("#POST " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                    //TODO : Rollback
-                }
-            }
-
+        Passage p = null;
+        try {
+            p = passageManager.create(passage);
+        } catch (ObjectNotValidException e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST, e.getMessage(), Util.stackTraceToString(e));
         }
-        else {
-            response = this.getUnauthorization();
-        }
-
-        return response;
+        return p;
     }
 
     @Path("/{user_id}/passages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllPassagesByUserId(@PathParam("user_id") int id){
+    @Secured
+    public List<Passage> getAllPassagesByUserId(@PathParam("user_id") int id) throws BusinessException {
         LOGGER.info("#GET " + id);
-        Response response;
-
-        if(this.authorization) {
-            try {
-                List<Passage> passages = passageManager.getPassagesByUserId(id);
-
-                URI builder = uriInfo.getAbsolutePathBuilder()
-                        .build();
-
-                response = Response
-                        .created(builder)
-                        .entity(passages)
-                        .build();
-
-                } catch (PassageNotExistException e) {
-                    LOGGER.warning("#GET " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                    //TODO : Rollback
-                }
-        }
-        else{
-            response = this.getUnauthorization();
+        List<Passage> passages = null;
+        try {
+            passages = passageManager.getPassagesByUserId(id);
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND, e.getMessage(), Util.stackTraceToString(e));
         }
 
-        return response;
+        return passages;
     }
 
     @Path("/{user_id}/passages/{passage_id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPassage(@PathParam("user_id") int userId, @PathParam("passage_id") int passageId){
+    @Secured
+    public Passage getPassage(@PathParam("user_id") int userId, @PathParam("passage_id") int passageId) throws BusinessException {
         LOGGER.info("#GET Passage with userId " + userId + " and passageId : " + passageId);
-        Response response;
 
-        if(this.authorization){
-            try {
-                Passage passage = passageManager.getPassage(userId, passageId);
+        Passage passage = null;
 
-                URI builder = uriInfo.getAbsolutePathBuilder()
-                        .build();
-
-                response = Response
-                        .created(builder)
-                        .entity(passage)
-                        .build();
-
-            } catch (PassageNotExistException e) {
-                LOGGER.warning("#GET " + e.getLocalizedMessage());
-                response = Error.internalServer(e).getResponse();
-                //TODO : Rollback
-            }
-        }
-        else{
-            response = this.getUnauthorization();
+        try {
+            passage = passageManager.getPassage(userId, passageId);
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND, e.getMessage(), Util.stackTraceToString(e));
         }
 
-        return response;
+        return passage;
     }
 }

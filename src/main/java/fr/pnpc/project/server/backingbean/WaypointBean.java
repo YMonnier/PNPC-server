@@ -2,8 +2,7 @@ package fr.pnpc.project.server.backingbean;
 
 
 import fr.pnpc.project.models.ejb.WaypointManager;
-import fr.pnpc.project.models.exceptions.NotValidException;
-import fr.pnpc.project.models.exceptions.NullObjectException;
+import fr.pnpc.project.models.exceptions.ObjectNotValidException;
 import fr.pnpc.project.models.model.Waypoint;
 
 import javax.faces.bean.SessionScoped;
@@ -30,9 +29,7 @@ public class WaypointBean implements Serializable {
     public String createWaypoint() {
         try {
             waypointManager.create(waypoint);
-        } catch (NullObjectException e) {
-            e.printStackTrace();
-        } catch (NotValidException e) {
+        } catch (ObjectNotValidException e) {
             e.printStackTrace();
         }
 

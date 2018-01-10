@@ -1,45 +1,35 @@
 package fr.pnpc.project.server.resources;
 
 import fr.pnpc.project.models.ejb.WaypointManager;
-import fr.pnpc.project.models.exceptions.NotValidException;
-import fr.pnpc.project.models.exceptions.NullObjectException;
+import fr.pnpc.project.models.exceptions.NotFoundException;
+import fr.pnpc.project.models.exceptions.ObjectNotValidException;
 import fr.pnpc.project.models.model.Waypoint;
 import fr.pnpc.project.models.util.Validator;
 import fr.pnpc.project.models.util.ValidatorManager;
-import fr.pnpc.project.server.utils.auth.AuthorizationService;
-import fr.pnpc.project.server.utils.errors.Error;
+import fr.pnpc.project.server.utils.auth.Secured;
+import fr.pnpc.project.server.utils.auth.Util;
+import fr.pnpc.project.server.utils.exceptions.BusinessException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.net.URI;
-import java.util.Set;
 import java.util.logging.Logger;
 
 @Path("/waypoints")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
-public class WaypointResource extends AuthorizationService {
+public class WaypointResource {
 
     @Inject
     WaypointManager waypointManager;
 
     private final static Logger LOGGER = Logger.getLogger(UserResource.class.getSimpleName());
 
-    @Context
-    UriInfo uriInfo;
-
-    private Validator<Waypoint> validator = new ValidatorManager();
 
     public WaypointResource() {
-        super();
     }
 
-    public WaypointResource(@Context HttpHeaders headers) {
-        super(headers);
-    }
 
     /**
      * Method handling HTTP POST requests. The returned object will be sent
@@ -51,40 +41,18 @@ public class WaypointResource extends AuthorizationService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(Waypoint waypoint){
+    @Secured
+    public Waypoint create(Waypoint waypoint) throws BusinessException {
         LOGGER.info("#POST " + waypoint.toString());
-        Response response = null;
-        Set<ConstraintViolation<Waypoint>> constraintViolations = validator.constraintViolations(waypoint);
+        Waypoint w = null;
 
-        if(this.authorization) {
-            if (constraintViolations.size() > 0) {
-                response = Error.badRequest(constraintViolations.toString())
-                        .getResponse();
-                LOGGER.warning("#POST " + response.toString());
-            } else {
-                try {
-                    waypoint = waypointManager.create(waypoint);
-
-                    URI builder = uriInfo.getAbsolutePathBuilder()
-                            .build();
-
-                    response = Response
-                            .created(builder)
-                            .entity(waypoint)
-                            .build();
-
-                } catch (Exception e) {
-                    LOGGER.warning("#POST " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                    //TODO : Rollback
-                }
+            try {
+                w = waypointManager.create(waypoint);
+            } catch (ObjectNotValidException e) {
+                throw new BusinessException(Response.Status.BAD_REQUEST, e.getMessage(), Util.stackTraceToString(e));
             }
 
-        } else {
-            response = this.getUnauthorization();
-        }
-
-        return response;
+        return w;
 
     }
 
@@ -92,88 +60,53 @@ public class WaypointResource extends AuthorizationService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("id") int id){
+    @Secured
+    public Waypoint get(@PathParam("id") int id) throws BusinessException {
         LOGGER.info("#GET waypoint : " + id);
-        Response response = null;
+        Waypoint waypoint = null;
 
-        if(this.authorization){
-            Waypoint waypoint = waypointManager.getById(id);
+            try {
+                waypoint = waypointManager.getById(id);
+            } catch (NotFoundException e) {
+                throw new BusinessException(Response.Status.NOT_FOUND,
+                        e.getMessage(), Util.stackTraceToString(e));
+            }
 
-            URI builder = uriInfo.getAbsolutePathBuilder()
-                    .build();
-
-            response = Response
-                    .created(builder)
-                    .entity(waypoint)
-                    .build();
-        }
-        else{
-            response = this.getUnauthorization();
-        }
-
-        return response;
+        return waypoint;
     }
 
     @Path("/{id}")
     @DELETE
-    public Response delete(@PathParam("id") int id){
+    @Secured
+    public void delete(@PathParam("id") int id) throws BusinessException {
         LOGGER.info("#DELETE waypoint : " + id);
 
         Response response;
-
-        if(this.authorization){
+        try {
             waypointManager.delete(id);
-            response = Response.ok().build();
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND,
+                    e.getMessage(), Util.stackTraceToString(e));
         }
-        else{
-            response = this.getUnauthorization();
-        }
-
-        return response;
     }
 
     @Path("/{id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response put(@PathParam("id") int id, Waypoint waypoint){
+    @Secured
+    public Waypoint put(@PathParam("id") int id, Waypoint waypoint) throws BusinessException {
         LOGGER.info("#PUT waypoint : " + id);
-        Response response = null;
+        Waypoint w = null;
 
-        if(this.authorization){
-            Set<ConstraintViolation<Waypoint>> constraintViolations = validator.constraintViolations(waypoint);
-
-            if (constraintViolations.size() > 0) {
-                response = Error.badRequest(constraintViolations.toString())
-                        .getResponse();
-                LOGGER.warning("#POST " + response.toString());
-            }
-            else {
-                try {
-                    waypoint = waypointManager.update(waypoint);
-
-                    URI builder = uriInfo.getAbsolutePathBuilder()
-                            .build();
-
-                    response = Response
-                            .created(builder)
-                            .entity(waypoint)
-                            .build();
-                } catch (NullObjectException e) {
-                    LOGGER.warning("#PUT " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                } catch (NotValidException e) {
-                    LOGGER.warning("#PUT " + e.getLocalizedMessage());
-                    response = Error.internalServer(e).getResponse();
-                }
-
-            }
-        }
-        else{
-            response = this.getUnauthorization();
+        try {
+            w = waypointManager.update(waypoint);
+        } catch (ObjectNotValidException e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST,
+                    e.getMessage(), Util.stackTraceToString(e));
         }
 
-        return response;
+        return w;
     }
 
 
