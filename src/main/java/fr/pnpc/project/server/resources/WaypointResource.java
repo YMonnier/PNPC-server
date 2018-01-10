@@ -46,11 +46,11 @@ public class WaypointResource {
         LOGGER.info("#POST " + waypoint.toString());
         Waypoint w = null;
 
-            try {
-                w = waypointManager.create(waypoint);
-            } catch (ObjectNotValidException e) {
-                throw new BusinessException(Response.Status.BAD_REQUEST, e.getMessage(), Util.stackTraceToString(e));
-            }
+        try {
+            w = waypointManager.create(waypoint);
+        } catch (ObjectNotValidException e) {
+            throw new BusinessException(Response.Status.BAD_REQUEST, e.getMessage(), Util.stackTraceToString(e));
+        }
 
         return w;
 
@@ -65,12 +65,12 @@ public class WaypointResource {
         LOGGER.info("#GET waypoint : " + id);
         Waypoint waypoint = null;
 
-            try {
-                waypoint = waypointManager.getById(id);
-            } catch (NotFoundException e) {
-                throw new BusinessException(Response.Status.NOT_FOUND,
-                        e.getMessage(), Util.stackTraceToString(e));
-            }
+        try {
+            waypoint = waypointManager.getById(id);
+        } catch (NotFoundException e) {
+            throw new BusinessException(Response.Status.NOT_FOUND,
+                    e.getMessage(), Util.stackTraceToString(e));
+        }
 
         return waypoint;
     }
