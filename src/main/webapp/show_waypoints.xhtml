@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/templates/mainTemplate.xhtml">
 
     <h:head>
@@ -11,8 +11,32 @@
 
         <h1>List of waypoints : </h1>
 
-        <h:dataTable value="#{waypointBean.getAllWaypoints}" var="waypoint">
-            <h:column>#{waypoint.id}</h:column>
+        <h:dataTable value="#{waypointBean.getAllWaypoints()}" var="waypoint" border="1">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Identifiant" />
+                </f:facet>
+                <h:outputText value="#{waypoint.id}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Beacon id" />
+                </f:facet>
+                <h:outputText value="#{waypoint.beaconId}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Latitude" />
+                </f:facet>
+                <h:outputText value="#{waypoint.latitude}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Longitude" />
+                </f:facet>
+                <h:outputText value="#{waypoint.longitude}" />
+            </h:column>
+
         </h:dataTable>
 
     </ui:define>
