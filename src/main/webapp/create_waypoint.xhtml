@@ -16,16 +16,16 @@
             <h:form id="formulaire">
                     <h2>Creating a waypoint</h2>
                     <h:panelGrid columns="2">
-                        <h:outputLabel for="id">Identifiant</h:outputLabel>
-                        <p:inputText id="id"
+                        <h:outputLabel for="beaconId">Identifiant</h:outputLabel>
+                        <p:inputText id="beaconId"
                                      label="Message"
                                      placeholder="#{msg['placeholder.id']}"
-                                     value="#{waypointBean.waypoint.id}"
+                                     value="#{waypointBean.waypoint.beaconId}"
                                      required="true"
-                                     requiredMessage="Please enter the latitude"
+                                     requiredMessage="Please enter the waypoint identifier."
                                      size="20"
                                      maxlength="60">
-                            <f:ajax event="blur" render="latitudeError" />
+                            <f:ajax event="blur" render="beaconId" />
                         </p:inputText>
                         <h:outputLabel for="latitude">Latitude</h:outputLabel>
                         <p:inputText id="latitude"
@@ -33,7 +33,7 @@
                                      placeholder="#{msg['placeholder.latitude']}"
                                      value="#{waypointBean.waypoint.latitude}"
                                      required="true"
-                                     requiredMessage="Please enter the latitude"
+                                     requiredMessage="Please enter the latitude."
                                      size="20"
                                      maxlength="60">
                             <f:ajax event="blur" render="latitudeError" />
@@ -45,16 +45,17 @@
                                      placeholder="#{msg['placeholder.longitude']}"
                                      value="#{waypointBean.waypoint.longitude}"
                                      required="true"
-                                     requiredMessage="Please enter the longitude"
+                                     requiredMessage="Please enter the longitude."
                                      size="20"
                                      maxlength="60">
                             <f:ajax event="blur" render="longitudeError" />
                         </p:inputText>
+                        <h:message id="beaconError" for="beaconId"/>
                         <h:message id="latitudeError" for="latitude"/>
                         <h:message id="longitudeError" for="longitude"/>
                         <br/>
                         <br/>
-                        <p:commandButton ajax="false" value="Create" action="#{waypointBean.createWaypoint()}"/>
+                        <p:commandButton ajax="false" value="Create" action="#{waypointBean.createWaypoint}"/>
                     </h:panelGrid>
             </h:form>
     </ui:define>
