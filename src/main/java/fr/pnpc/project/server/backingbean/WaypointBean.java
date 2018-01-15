@@ -10,12 +10,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Named
 @ViewScoped
 public class WaypointBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private final static Logger LOGGER = Logger.getLogger(WaypointBean.class.getSimpleName());
+
 
     private Waypoint waypoint;
 
@@ -30,7 +34,7 @@ public class WaypointBean implements Serializable {
         try {
             waypointManager.create(waypoint);
         } catch (ObjectNotValidException e) {
-            e.printStackTrace();
+           LOGGER.info(e.getLocalizedMessage());
         }
 
         return "welcome";
