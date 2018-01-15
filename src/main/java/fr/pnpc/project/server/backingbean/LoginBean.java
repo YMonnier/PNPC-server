@@ -8,6 +8,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named
@@ -31,7 +32,7 @@ public class LoginBean implements Serializable {
         try {
             userManager.register(user);
         } catch (ObjectNotValidException e) {
-            LOGGER.info(e.getLocalizedMessage());
+            LOGGER.log(Level.INFO, e.getLocalizedMessage());
         }
 
         return "welcome";
@@ -41,7 +42,7 @@ public class LoginBean implements Serializable {
         try {
             userManager.login(user.getNickname(), user.getMdp());
         } catch (Exception e) {
-            LOGGER.info(e.getLocalizedMessage());
+            LOGGER.log(Level.INFO, e.getLocalizedMessage());
         }
         return "welcome";
     }

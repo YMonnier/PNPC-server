@@ -21,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Path("/users")
@@ -54,7 +55,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public User create(User user) throws BusinessException {
-        LOGGER.info("#POST " + user.toString());
+        LOGGER.log(Level.INFO, "#POST %s", user.toString());
 
         User u = null;
         try {
@@ -77,7 +78,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public User login(String json) throws BusinessException {
-        LOGGER.info("#POST " + json);
+        LOGGER.log(Level.INFO, "#POST %s", json);
 
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(json).getAsJsonObject();
@@ -110,7 +111,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public Passage createPassage(@PathParam("user_id") long userId, @PathParam("waypoint_id") long waypointId) throws BusinessException {
-        LOGGER.info("#POST userId " + userId + ", waypointId " + waypointId);
+        LOGGER.log(Level.INFO, "#POST userId %d waypointId %d", new Object[]{userId, waypointId});
 
         Passage passage = null;
 
@@ -135,7 +136,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public List<Passage> getAllPassagesByUserId(@PathParam("user_id") long id) throws BusinessException {
-        LOGGER.info("#GET " + id);
+        LOGGER.log(Level.INFO,"#GET %d", id);
         List<Passage> passages = null;
         try {
             passages = passageManager.getPassagesByUserId(id);
@@ -151,7 +152,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     public Passage getPassage(@PathParam("user_id") int userId, @PathParam("passage_id") int passageId) throws BusinessException {
-        LOGGER.info("#GET Passage with userId " + userId + " and passageId : " + passageId);
+        LOGGER.log(Level.INFO, "#GET Passage with userId %d and passageId : %d", new Object[]{userId, passageId});
 
         Passage passage = null;
 

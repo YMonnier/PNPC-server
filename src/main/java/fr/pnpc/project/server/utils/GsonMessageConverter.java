@@ -15,6 +15,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Provider
@@ -57,7 +58,7 @@ public class GsonMessageConverter
         try {
             streamReader = new InputStreamReader(inputStream, UTF_8);
         } catch (UnsupportedEncodingException e) {
-            LOGGER.info(e.getLocalizedMessage());
+            LOGGER.log(Level.INFO, e.getLocalizedMessage());
         }
         try {
             return getGson().fromJson(streamReader, type);
@@ -66,7 +67,7 @@ public class GsonMessageConverter
                 if(streamReader != null)
                     streamReader.close();
             } catch (IOException e) {
-                LOGGER.info(e.getLocalizedMessage());
+                LOGGER.log(Level.INFO, e.getLocalizedMessage());
             }
         }
     }

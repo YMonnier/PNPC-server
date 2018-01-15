@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Path("/waypoints")
@@ -43,7 +44,7 @@ public class WaypointResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public Waypoint create(Waypoint waypoint) throws BusinessException {
-        LOGGER.info("#POST " + waypoint.toString());
+        LOGGER.log(Level.INFO, "#POST %s", waypoint.toString());
         Waypoint w = null;
 
         try {
@@ -62,7 +63,7 @@ public class WaypointResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public Waypoint get(@PathParam("id") long id) throws BusinessException {
-        LOGGER.info("#GET waypoint : " + id);
+        LOGGER.log(Level.INFO, "#GET waypoint : %d", id);
         Waypoint waypoint = null;
 
         try {
@@ -81,7 +82,7 @@ public class WaypointResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public void delete(@PathParam("id") long id) throws BusinessException {
-        LOGGER.info("#DELETE waypoint : " + id);
+        LOGGER.log(Level.INFO, "#DELETE waypoint : %d", id);
 
         try {
             waypointManager.delete(id);
@@ -97,7 +98,7 @@ public class WaypointResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
     public Waypoint put(@PathParam("id") long id, Waypoint waypoint) throws BusinessException {
-        LOGGER.info("#PUT waypoint : " + id);
+        LOGGER.log(Level.INFO, "#PUT waypoint : %d", id);
         Waypoint w = null;
 
         try {

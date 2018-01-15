@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Named
@@ -34,7 +35,7 @@ public class WaypointBean implements Serializable {
         try {
             waypointManager.create(waypoint);
         } catch (ObjectNotValidException e) {
-           LOGGER.info(e.getLocalizedMessage());
+            LOGGER.log(Level.INFO, e.getLocalizedMessage());
         }
 
         return "welcome";
