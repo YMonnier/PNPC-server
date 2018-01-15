@@ -2,6 +2,7 @@ package fr.pnpc.project.server.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fr.pnpc.project.server.backingbean.LoginBean;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -14,12 +15,15 @@ import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GsonMessageConverter
         implements MessageBodyWriter<Object>, MessageBodyReader<Object> {
+
+    private final static Logger LOGGER = Logger.getLogger(GsonMessageConverter.class.getSimpleName());
 
     private static final String UTF_8 = "UTF-8";
 
@@ -53,7 +57,7 @@ public class GsonMessageConverter
         try {
             streamReader = new InputStreamReader(inputStream, UTF_8);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LOGGER.info(e.getLocalizedMessage());
         }
         try {
             return getGson().fromJson(streamReader, type);
@@ -62,7 +66,7 @@ public class GsonMessageConverter
                 if(streamReader != null)
                     streamReader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.info(e.getLocalizedMessage());
             }
         }
     }
