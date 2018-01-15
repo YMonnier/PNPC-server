@@ -77,7 +77,7 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public User login(String json) throws BusinessException {
-        LOGGER.info("#POST " + json.toString());
+        LOGGER.info("#POST " + json);
 
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(json).getAsJsonObject();
