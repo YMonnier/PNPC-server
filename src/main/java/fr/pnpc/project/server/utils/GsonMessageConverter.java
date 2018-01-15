@@ -59,7 +59,8 @@ public class GsonMessageConverter
             return getGson().fromJson(streamReader, type);
         } finally {
             try {
-                streamReader.close();
+                if(streamReader != null)
+                    streamReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
