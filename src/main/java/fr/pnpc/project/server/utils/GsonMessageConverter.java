@@ -56,13 +56,7 @@ public class GsonMessageConverter
             e.printStackTrace();
         }
         try {
-            Type jsonType;
-            if (type.equals(type)) {
-                jsonType = type;
-            } else {
-                jsonType = type;
-            }
-            return getGson().fromJson(streamReader, jsonType);
+            return getGson().fromJson(streamReader, type);
         } finally {
             try {
                 streamReader.close();
