@@ -20,8 +20,6 @@ public class GsonSingleton {
                     .setPrettyPrinting()
                     .create();
         }
-        if (gson == null)
-            throw new AssertionError("The gson instance should noy be null");
         return gson;
     }
 }
