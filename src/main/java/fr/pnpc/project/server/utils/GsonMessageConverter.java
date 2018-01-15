@@ -81,13 +81,7 @@ public class GsonMessageConverter
     public void writeTo(Object o, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> multivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8);
         try {
-            Type jsonType;
-            if (type.equals(type)) {
-                jsonType = type;
-            } else {
-                jsonType = type;
-            }
-            getGson().toJson(o, jsonType, writer);
+            getGson().toJson(o, type, writer);
         } finally {
             writer.close();
         }
