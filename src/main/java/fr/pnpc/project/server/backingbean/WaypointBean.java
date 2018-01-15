@@ -5,14 +5,14 @@ import fr.pnpc.project.models.ejb.WaypointManager;
 import fr.pnpc.project.models.exceptions.ObjectNotValidException;
 import fr.pnpc.project.models.model.Waypoint;
 
-import javax.faces.bean.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class WaypointBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,5 +38,13 @@ public class WaypointBean implements Serializable {
 
     public List getAllWaypoints() {
         return waypointManager.getAll();
+    }
+
+    public Waypoint getWaypoint() {
+        return waypoint;
+    }
+
+    public void setWaypoint(Waypoint waypoint) {
+        this.waypoint = waypoint;
     }
 }

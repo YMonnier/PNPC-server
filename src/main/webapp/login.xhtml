@@ -16,24 +16,24 @@
 
         <h:form styleClass="form-signin" prependId="false">
             <h2 class="form-signin-heading">Please sign in</h2>
-            <b:inputText id="email"
-                         placeholder="#{msg['placeholder.email']}"
-                         value="#{loginBean.user.email}"
-                            type="email">
+            <b:inputText id="nickname"
+                         placeholder="#{msg['placeholder.nickname']}"
+                         value="#{loginBean.user.nickname}"
+                         type="text">
                 <f:facet name="prepend">
                     <b:icon name="user" />
                 </f:facet>
             </b:inputText>
             <b:inputText id="password"
                          placeholder="#{msg['placeholder.password']}"
-                         value="#{loginBean.user.password}"
+                         value="#{loginBean.user.mdp}"
                          type="password">
                 <f:facet name="prepend">
                     <b:iconAwesome name="key" />
                 </f:facet>
             </b:inputText>
             <b:selectBooleanCheckbox value="true" caption="remember me"/>
-            <b:commandButton look="primary btn-block" value="#{loginBean.login()}" icon="log-in" size="lg"/>
+            <b:commandButton ajax="false" look="primary btn-block" action="#{loginBean.login()}" icon="log-in" size="lg"/>
         </h:form>
 
     </ui:define>

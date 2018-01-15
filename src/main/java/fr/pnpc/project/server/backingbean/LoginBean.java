@@ -6,12 +6,13 @@ import fr.pnpc.project.models.model.User;
 
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class LoginBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +38,7 @@ public class LoginBean implements Serializable {
 
     public String login(){
         try {
-            userManager.login(user.getEmail(), user.getMdp());
+            userManager.login(user.getNickname(), user.getMdp());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,5 +47,9 @@ public class LoginBean implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
