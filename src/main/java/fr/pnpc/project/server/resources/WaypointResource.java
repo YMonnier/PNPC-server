@@ -17,17 +17,32 @@ import javax.ws.rs.core.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * HTTP Resource to manage Waypoint.
+ * * POST waypoints/
+ * * GET waypoints
+ * * GET waypoints
+ * * GET waypoints
+ */
 @Path("/waypoints")
 @Stateless
 @Produces(MediaType.APPLICATION_JSON)
 public class WaypointResource {
 
+    /**
+     * A WaypointManager Object to manage Waypoint type. (CRUD).
+     */
     @Inject
     WaypointManager waypointManager;
 
+    /**
+     * A Logger object to log messages.
+     */
     private final static Logger LOGGER = Logger.getLogger(UserResource.class.getSimpleName());
 
-
+    /**
+     * Default WaypointResource constructor. Necessary for `JEE`.
+     */
     public WaypointResource() {
     }
 
@@ -35,9 +50,15 @@ public class WaypointResource {
     /**
      * Method handling HTTP POST requests. The returned object will be sent
      * to the client as JSON Object.
+     * <p>
+     * Create a new Waypoint to the system.
      *
-     * @param waypoint
-     * @return
+     * @param waypoint {
+     *                 "beaconId": "zkjendez-1234-232zdkjnd-23",
+     *                 "latitude": 9.123,
+     *                 "longitude": 46.332
+     *                 }
+     * @return A Waypoint.
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +78,16 @@ public class WaypointResource {
 
     }
 
+    /**
+     * Method handling HTTP POST requests. The returned object will be sent
+     * to the client as JSON Object.
+     *
+     * Returns a specific waypoint.
+     *
+     * @param id, waypoint ID.
+     * @return A Waypoint.
+     * @throws BusinessException custom Exception.
+     */
     @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +107,15 @@ public class WaypointResource {
         return waypoint;
     }
 
+    /**
+     * Method handling HTTP POST requests. The returned object will be sent
+     * to the client as JSON Object.
+     *
+     * Delete a specific Waypoint.
+     *
+     * @param id Waypoint ID.
+     * @throws BusinessException custom Exception.
+     */
     @Path("/{id}")
     @DELETE
     @Secured
@@ -92,6 +132,16 @@ public class WaypointResource {
         }
     }
 
+    /**
+     * Method handling HTTP POST requests. The returned object will be sent
+     * to the client as JSON Object.
+     *
+     * Update a specific Waypoint.
+     *
+     * @param waypoint Waypoint updated
+     * @return A waypoint updated
+     * @throws BusinessException custom Exception
+     */
     @Path("/{id}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)

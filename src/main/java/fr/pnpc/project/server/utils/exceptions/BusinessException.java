@@ -27,6 +27,8 @@ public class BusinessException extends Exception {
     private String message;
 
     /**
+     * BusinessEception Constructor
+     *
      * @param status,           HTTP Status of the response.
      * @param message,          exception message.
      * @param developerMessage, detailed error description for developers.

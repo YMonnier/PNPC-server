@@ -21,18 +21,38 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * AuthenticationFilter. Used to check if the
+ * request has a valid Authorization header.
+ */
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 @Dependent
 public class AuthenticationFilter implements ContainerRequestFilter {
 
+    /**
+     * REALM Identifier
+     */
     private static final String REALM = "pnpc-server";
+
+    /**
+     * Constant UNAUTHORIZED Message.
+     */
     private static final String UNAUTHORIZED = "You are not authorized.";
 
+    /**
+     * User CrudService. Used to make CRUD actions.
+     */
     @Inject
     CrudService<User> crudService;
 
+    /**
+     * Get request before to access to a resource action.
+     *
+     * @param requestContext A ContainerRequestContext Object.
+     * @throws IOException
+     */
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
@@ -58,6 +78,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
     }
 
+    /**
+     * Check if the `authorizationHeader`is valid.
+     *
+     * @param authorizationHeader A token.
+     * @return true if valid, otherwise false.
+     */
     private boolean isTokenBasedAuthentication(String authorizationHeader) {
 
         // Check if the Authorization header is valid
@@ -66,6 +92,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         return authorizationHeader != null;
     }
 
+    /**
+     * Return an UNAUTHORIZED request if the token is not
+     * valid or if the Authrization header is missing.
+     *
+     * @param requestContext current request.
+     */
     private void abortWithUnauthorized(ContainerRequestContext requestContext) {
 
         // Abort the filter chain with a 401 status code response
@@ -80,18 +112,24 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                         .build());
     }
 
+    /**
+     * Check if the token is valid from the Database.
+     *
+     * @param token Token from Header.
+     * @throws Exception
+     */
     private void validateToken(String token) throws Exception {
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
 
         if (token != null) {
-                List<User> users = crudService.findWithNamedQuery(User.FIND_BY_TOKEN, QueryParameter.with("token", token).parameters());
-                User user = null;
-                if (users != null)
-                    user = users.get(0);
+            List<User> users = crudService.findWithNamedQuery(User.FIND_BY_TOKEN, QueryParameter.with("token", token).parameters());
+            User user = null;
+            if (users != null)
+                user = users.get(0);
 
-                if (user == null)
-                    throw new Exception();
+            if (user == null)
+                throw new Exception();
         }
 
     }
