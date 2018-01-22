@@ -84,7 +84,7 @@ public class WaypointResource {
      *
      * Returns a specific waypoint.
      *
-     * @param id, waypoint ID.
+     * @param waypointId, Beacon ID.
      * @return A Waypoint.
      * @throws BusinessException custom Exception.
      */
@@ -93,12 +93,12 @@ public class WaypointResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public Waypoint get(@PathParam("id") long id) throws BusinessException {
-        LOGGER.log(Level.INFO, "#GET waypoint : %d", id);
+    public Waypoint get(@PathParam("id") String waypointId) throws BusinessException {
+        LOGGER.log(Level.INFO, "#GET waypoint : %d", waypointId);
         Waypoint waypoint = null;
 
         try {
-            waypoint = waypointManager.getById(id);
+            waypoint = waypointManager.getById(waypointId);
         } catch (NotFoundException e) {
             throw new BusinessException(Response.Status.NOT_FOUND,
                     e.getMessage(), Util.stackTraceToString(e));
