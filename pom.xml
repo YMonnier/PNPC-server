@@ -88,12 +88,10 @@
         <version>0.7.30-dev-171</version>
     </parent>
 
-    <!-- ADAPTER les coordonnées -->
     <groupId>fr.pnpc.project.server</groupId>
     <artifactId>PNPC-Server</artifactId>
     <version>1.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <!-- ADAPTER les coordonnées -->
 
     <!-- ADAPTER les métadonnées -->
     <name>PNPC-server</name>
@@ -283,11 +281,10 @@
             <artifactId>PNPC-Models</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency-->
-
         <dependency>
             <groupId>fr.pnpc.project.models</groupId>
             <artifactId>PNPC-Models</artifactId>
-            <version>1.1.0-frozen-39</version>
+            <version>1.1.0-frozen-41</version>
         </dependency>
 
         <dependency>

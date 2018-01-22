@@ -154,8 +154,8 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Secured
-    public Passage createPassage(@PathParam("user_id") long userId, @PathParam("waypoint_id") long waypointId) throws BusinessException {
-        LOGGER.log(Level.INFO, "#POST userId %d waypointId %d", new Object[]{userId, waypointId});
+    public Passage createPassage(@PathParam("user_id") long userId, @PathParam("waypoint_id") String waypointId) throws BusinessException {
+        LOGGER.log(Level.INFO, "#POST userId %d waypointId %s", new Object[]{userId, waypointId});
 
         Passage passage = null;
 
