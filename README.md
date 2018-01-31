@@ -3,6 +3,7 @@
 PNPC is a student project to locate hikers in natural parks by using [Estimotes](https://estimote.com).
 
 See our project components:
+- [Deploy](https://github.com/YMonnier/PNPC-deploy)
 - [Models](https://github.com/YMonnier/PNPC-models)
 - [App iOS](https://github.com/YMonnier/PNPC-iOS)
 - [App Android](https://github.com/YMonnier/PNPC-android)
