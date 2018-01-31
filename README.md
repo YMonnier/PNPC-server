@@ -16,4 +16,4 @@ See our project components:
 
 ## License
 
-PNPC-models is available under the MIT license. See the [LICENSE](https://github.com/YMonnier/PNPC-models/blob/master/LICENSE) file for more info.
+PNPC-server is available under the MIT license. See the [LICENSE](https://github.com/YMonnier/PNPC-models/blob/master/LICENSE) file for more info.
